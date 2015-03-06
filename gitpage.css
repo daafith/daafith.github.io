@@ -1,0 +1,25 @@
+html,body {
+	height:100%;
+	font-family:Courier;
+	font-size: 13px;
+	background: #ccdddd;
+}
+
+div.pageTitle {
+	font-size: 16px;
+	padding-left: 10px;
+	padding-bottom: 8px;
+	
+}
+
+div.menu {
+	padding-left: 10px;
+}
+
+div.content {
+	height:100%;
+}
+
+li.projectTitle {
+	list-style-type: none;
+}

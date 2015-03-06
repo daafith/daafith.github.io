@@ -2,12 +2,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>testing comes first, then comes testing</title>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   	<meta name="description" content="David Baak's Github page">
+   	<meta name="author" content="David Baak">
+	<title>testing comes first and then comes testing</title>
+	<link href="gitpage.css" rel="stylesheet">
+	<link href="css/prism.css" rel="stylesheet" />
 </head>
 <body>
-<div>Working on projects:</div>
+<div class="pageTitle">Working on projects:</div>
 <ul>
-	<li>BaseMatcherCollector</li>
+	<li class="projectTitle">BaseMatcherCollector</li>
 </ul>
+<pre>
+	<code class="language-java">
+public SpeedCameraMatchers {
+
+  public static BaseMatcher<SpeedCamera> hasCorrectedSpeedTo(final int correctedSpeed) {
+    return new TypeSafeMatcher<SpeedCamera>() {
+		      
+      public void describeTo(final Description description) {
+        description.appendText("The camera should have corrected the 
+					speed to ").appendValue(correctedSpeed);
+      }
+		      
+      public void describeMismatchSafely(final SpeedCamera camera, 
+				final Description mismatchDescription) {
+        mismatchDescription.appendText(" alas, the camera 
+			corrected it to ").appendValue(camera.getCorrectedSpeed());
+      }
+		      
+      public boolean matchesSafely(final SpeedCamera camera) {
+        return correctedSpeed == camera.getCorrectedSpeed();
+      }
+    };
+  }
+
+  public static BaseMatcher<SpeedCamera> hasTakenAPicture(final boolean hasTakenPicture) {
+    return new TypeSafeMatcher<SpeedCamera>() {
+		      
+      public void describeTo(final Description description) {
+        description.appendText("Taking a picture should have 
+				returned ").appendValue(hasTakenPicture);
+      }
+		      
+      public void describeMismatchSafely(final SpeedCamera item, final Description
+				mismatchDescription) {
+        mismatchDescription.appendText(" returned ").appendValue(item.isPictureTaken());
+      }
+
+      public boolean matchesSafely(final SpeedCamera camera) {
+        return hasTakenPicture == camera.isPictureTaken();
+      }
+		      
+    };
+  }
+	
+  public static BaseMatcher<SpeedCamera> hasRevokedLicense(final boolean 
+								hasRevokedLicense) {
+    return new TypeSafeMatcher<SpeedCamera>() {
+		      
+      public void describeTo(final Description description) {
+        description.appendText("Revoking license should have 
+				returned ").appendValue(hasRevokedLicense);
+      }
+		      
+      public void describeMismatchSafely(final SpeedCamera item, 
+					final Description mismatchDescription) {
+        mismatchDescription.appendText(" returned ").appendValue(item.isLicenseRevoked());
+      }
+
+      public boolean matchesSafely(final SpeedCamera camera) {
+        return hasRevokedLicense == camera.isLicenseRevoked();
+      }
+		      
+    };
+  }
+}
+	</code>
+</pre>
+<script src="prism.js"></script>
 </body>
 </html>
