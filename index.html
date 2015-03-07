@@ -30,8 +30,8 @@
     // Now we don't know what instanceOf(Foo.class) and equalTo("Bar") return
     </code>
   </pre>
-  Now we have to look for the cause of the sameInstance issue. Let's say we found and fixed the problem and run the test again.
-  This time our second matcher instanceOf(Qux.class)) returns <b>false</b>. So we have to look for the cause again and...well, you get the point.<br /><br />
+  Now we look for the cause of the sameInstance issue. Let's say we find and fix the problem and run the test again.
+  This time our second matcher instanceOf(Qux.class)) returns <b>false</b>. So we have to look for the cause again and...well, you get the point. We need to find a way to collect the information of all our assertions.<br /><br />
   
   <a class="inner" href="collector.html">The BaseMatcherCollector</a> enables us to safely chain <a class="inner" href="custom.html">customised BaseMatchers</a>. It allows us to write tests like the one below and returns all results <strong>after all</strong> matchers have been executed.
   <pre>
