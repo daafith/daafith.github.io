@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="description" content="Hamcrest, BaseMatcher, Assertion Chaining">
+   <meta name="author" content="David Baak">
+	<title>testing comes first and then comes testing</title>
+	<link href="gitpage.css" rel="stylesheet">
+</head>
+<body>
+<div class="pageTitle">The BaseMatcherCollector</div>
+<div class="menu">
+  <span class="menuItem"><a href="index.html">Safe Assertion Chaining</a></span>
+  <span class="menuItem"><a href="custom.html">Custom BaseMatchers</a></span>
+  <span class="menuItem"><a href="collector.html">The BaseMatcherCollector</a></span>
+</div>
+<div class="content">
+  Customised failure output helps our test reports express what we expected and what the actual result was.
+  A not so DRY way to do it is this.
+  <pre>
+    <code>
+    <b>public void</b> myStringTest() {
+      <i>assertThat</i>("foo.getBar returned an incorrect value", foo.getBar(), equalTo("Bar"));
+    }
+
+    <b>public void</b> myOtherStringTest() {
+      <i>assertThat</i>("foo.getBar returned an incorrect value", foo.getBar(), equalTo("Foo"));
+    }
+
+    <b>public void</b> myBooleanTest() {
+      <i>assertThat</i>("foo.isBar returned an incorrect value", foo.isBar(), equalTo(true));
+    }
+    
+    <b>public void</b> myOtherBooleanTest() {
+      <i>assertThat</i>("foo.isBar returned an incorrect value", foo.isBar(), equalTo(false));
+    }
+    // ad infinitum
+    </code>
+  </pre>
+  What we want to do is, we want to write the customised failure output for our matchers only once. Like this.
+  <pre>
+      <code>
+    <b>public</b> FooMatchers {
+
+        <b>public static</b> BaseMatcher&lt;Foo&gt; hasBar(final String bar) {
+            <b>return new</b> TypeSafeMatcher&lt;Foo&gt;() {
+                  
+              <b>public void</b> describeTo(final Description description) {
+                description.appendText("getBar should have been ").appendValue(bar);
+              }
+                  
+              <b>public void</b> describeMismatchSafely(final Foo foo, final Description mismatchDescription) {
+                mismatchDescription.appendText(" it was ").appendValue(foo.getBar());
+              }
+                  
+              <b>public boolean</b> matchesSafely(final Foo foo) {
+                  return bar.equals(foo.getBar());
+              }
+            };
+          }
+
+          <b>public static</b> BaseMatcher&lt;Foo&gt; isBar(final boolean isBar) {
+            <b>return new</b> TypeSafeMatcher&lt;Foo&gt;() {
+                  
+              <b>public void</b> describeTo(final Description description) {
+                description.appendText("isBar should have returned ").appendValue(isBar);
+              }
+                  
+              <b>public void</b> describeMismatchSafely(final Foo foo, final Description mismatchDescription) {
+                mismatchDescription.appendText(" returned ").appendValue(foo.isBar());
+              }
+                  
+              <b>public boolean</b> matchesSafely(final Foo foo) {
+                return isBar == foo.isBar();
+              }
+            };
+          }
+    }
+    </code>
+  </pre>
+  Our tests look different but still provide us with clear failure output.
+  <pre>
+    <code>
+    <b>public void</b> myStringTest() {
+      <i>assertThat</i>(foo, hasBar("Bar"));
+    }
+
+    <b>public void</b> myOtherStringTest() {
+      <i>assertThat</i>(foo, hasBar("Foo"));
+    }
+
+    <b>public void</b> myBooleanTest() {
+      <i>assertThat</i>(foo, isBar(true));
+    }
+    
+    <b>public void</b> myOtherBooleanTest() {
+      <i>assertThat</i>(foo, isBar(false));
+    }
+    </code>
+  </pre>
+  Now let's start chaining them with <a class="inner" href="collector.html">the BaseMatcherCollector</a>.<br /><br />
+</div>
+<div class="footer"><a class="inner" target="_blank" href="http://www.testright.nl/">David Baak</a> &copy;</div>
+</body>
+</html>

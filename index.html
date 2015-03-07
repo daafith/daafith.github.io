@@ -3,85 +3,50 @@
 <html>
 <head>
 	<meta charset="utf-8">
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   	<meta name="description" content="David Baak's Github page">
-   	<meta name="author" content="David Baak">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="description" content="Hamcrest, BaseMatcher, Assertion Chaining">
+   <meta name="author" content="David Baak">
 	<title>testing comes first and then comes testing</title>
 	<link href="gitpage.css" rel="stylesheet">
-	<link href="css/prism.css" rel="stylesheet" />
 </head>
 <body>
-<div class="pageTitle">Working on projects:</div>
-<ul>
-	<li class="projectTitle">BaseMatcherCollector</li>
-</ul>
-<pre>
-	<code class="language-java">
-public SpeedCameraMatchers {
-
-  public static BaseMatcher<SpeedCamera> hasCorrectedSpeedTo(final int correctedSpeed) {
-    return new TypeSafeMatcher<SpeedCamera>() {
-		      
-      public void describeTo(final Description description) {
-        description.appendText("The camera should have corrected the 
-					speed to ").appendValue(correctedSpeed);
-      }
-		      
-      public void describeMismatchSafely(final SpeedCamera camera, 
-				final Description mismatchDescription) {
-        mismatchDescription.appendText(" alas, the camera 
-			corrected it to ").appendValue(camera.getCorrectedSpeed());
-      }
-		      
-      public boolean matchesSafely(final SpeedCamera camera) {
-        return correctedSpeed == camera.getCorrectedSpeed();
-      }
-    };
-  }
-
-  public static BaseMatcher<SpeedCamera> hasTakenAPicture(final boolean hasTakenPicture) {
-    return new TypeSafeMatcher<SpeedCamera>() {
-		      
-      public void describeTo(final Description description) {
-        description.appendText("Taking a picture should have 
-				returned ").appendValue(hasTakenPicture);
-      }
-		      
-      public void describeMismatchSafely(final SpeedCamera item, final Description
-				mismatchDescription) {
-        mismatchDescription.appendText(" returned ").appendValue(item.isPictureTaken());
-      }
-
-      public boolean matchesSafely(final SpeedCamera camera) {
-        return hasTakenPicture == camera.isPictureTaken();
-      }
-		      
-    };
-  }
-	
-  public static BaseMatcher<SpeedCamera> hasRevokedLicense(final boolean 
-								hasRevokedLicense) {
-    return new TypeSafeMatcher<SpeedCamera>() {
-		      
-      public void describeTo(final Description description) {
-        description.appendText("Revoking license should have 
-				returned ").appendValue(hasRevokedLicense);
-      }
-		      
-      public void describeMismatchSafely(final SpeedCamera item, 
-					final Description mismatchDescription) {
-        mismatchDescription.appendText(" returned ").appendValue(item.isLicenseRevoked());
-      }
-
-      public boolean matchesSafely(final SpeedCamera camera) {
-        return hasRevokedLicense == camera.isLicenseRevoked();
-      }
-		      
-    };
-  }
-}
-	</code>
-</pre>
-<script src="prism.js"></script>
+<div class="pageTitle">The BaseMatcherCollector</div>
+<div class="menu">
+  <span class="menuItem"><a href="index.html">Safe Assertion Chaining</a></span>
+  <span class="menuItem"><a href="custom.html">Custom BaseMatchers</a></span>
+  <span class="menuItem"><a href="collector.html">The BaseMatcherCollector</a></span>
+</div>
+<div class="content">
+  Assertion chaining can be an unsafe practice. Like in this example.
+  <pre>
+    <code>
+    <b>public void</b> myTest() {
+      <i>assertThat</i>(foo, is(allOf(
+                               sameInstance(bazObj)),
+                               instanceOf(Qux.class), 
+                               equalTo("FooBar"))));
+    }
+    // Oops, our first matcher sameInstance(quorkObj)) returned <b>false</b>. 
+    // Now we don't know what instanceOf(Foo.class) and equalTo("Bar") return
+    </code>
+  </pre>
+  Now we have to look for the cause of the sameInstance issue. Let's say we found and fixed the problem and run the test again.
+  This time our second matcher instanceOf(Qux.class)) returns <b>false</b>. So we have to look for the cause again and...well, you get the point.<br /><br />
+  
+  <a class="inner" href="collector.html">The BaseMatcherCollector</a> enables us to safely chain <a class="inner" href="custom.html">customised BaseMatchers</a>. It allows us to write tests like the one below and returns all results <strong>after all</strong> matchers have been executed.
+  <pre>
+      <code>
+    <b>public void</b> myTest() {
+      <i>assertThat</i>(speedCamera, all(
+                              hasMeasuredSpeed(53))
+                              .and(hasCorrectedSpeedTo(49))
+                              .and(hasCorrectedSpeedsInList(expectedInList))
+                              .and(hasTakenAPicture(false))
+                              .and(hasRevokedLicense(false)));
+    }
+    </code>
+  </pre>
+</div>
+<div class="footer"><a class="inner" target="_blank" href="http://www.testright.nl/">David Baak</a> &copy;</div>
 </body>
 </html>
