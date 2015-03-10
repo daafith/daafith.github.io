@@ -37,7 +37,7 @@
   <pre>
       <code>
     <b>public void</b> myTest() {
-      <i>assertThat</i>(speedCamera, all(
+      <i>assertThat</i>(speedCamera, chain(
                               hasMeasuredSpeed(53))
                               .and(hasCorrectedSpeedTo(49))
                               .and(hasCorrectedSpeedsInList(expectedInList))

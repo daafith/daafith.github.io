@@ -19,10 +19,10 @@
 <div class="content">
   The BaseMatcherCollector provides us with two methods.
   <ul>
-    <li>all</li>
+    <li>chain</li>
     <li>and</li>
   </ul>
-  <strong>all</strong> is at the start of our assertion chain, sets the type of BaseMatcher and includes the first BaseMatcher.<br />
+  <strong>chain</strong> is at the start of our assertion chain, sets the type of BaseMatcher and includes the first BaseMatcher.<br />
   <strong>and</strong> adds the next BaseMachter(s). <br />
   If you are curious about how it does that, check <a class="inner" target="_blank" href="https://github.com/daafith/BaseMatcherCollector">the BaseMatcherCollector on github</a>.<br />
   Let's assume the following test exists.
@@ -30,7 +30,7 @@
       <code>
     <b>public void</b> noneShallPass() {
       vehicle.passSpeedCamera(53);
-      assertThat(speedCamera, all(
+      assertThat(speedCamera, chain(
                                   hasTakenAPicture(true))
                                   .and(hasRevokedLicense(true))
                                   .and(hasCorrectedSpeedTo(0)));
@@ -41,13 +41,13 @@
     <pre>
       <code>
     Expected: 
-    Taking a picture should have returned &lt;true&gt; AND
-    Revoking license should have returned &lt;true&gt; AND
-    The camera should have corrected the speed to &lt;0&gt;<br />
+    Taking a picture should have returned &lt;true&gt; 
+    AND Revoking license should have returned &lt;true&gt; 
+    AND The camera should have corrected the speed to &lt;0&gt;<br />
     but:  
-    || Taking a picture should have returned &lt;true&gt; BUT  returned &lt;false&gt; 
-    || Revoking license should have returned &lt;true&gt; BUT  returned &lt;false&gt; 
-    || The camera should have corrected the speed to &lt;0&gt; BUT  alas, the camera corrected it to &lt;49&gt;
+    Taking a picture should have returned &lt;true&gt; BUT returned &lt;false&gt; 
+    Revoking license should have returned &lt;true&gt; BUT returned &lt;false&gt; 
+    The camera should have corrected the speed to &lt;0&gt; BUT alas, the camera corrected it to &lt;49&gt;
     </code>
   </pre>
   Of course you can tailor the output to fit your purposes. Then edit the describeTo and/or the describeMismatch method in  <a class="inner" target="_blank" href="https://github.com/daafith/BaseMatcherCollector">The BaseMatcherCollector</a>.<br /><br />
